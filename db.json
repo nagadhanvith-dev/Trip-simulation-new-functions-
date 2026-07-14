@@ -1,0 +1,56 @@
+{
+  "users": {
+    "dhanvith@gmail.com": {
+      "name": "Dhanvith",
+      "password": "password",
+      "wallet": "0x71C4B449A62c125638541e2a9b3f3e1a8a7f0042",
+      "bank": "HDFC Bank",
+      "upiId": "dhanvith@trippay",
+      "upiPin": "123456",
+      "balance": 30000,
+      "reputation": 95
+    },
+    "varsh@gmail.com": {
+      "name": "Varsh R",
+      "password": "password",
+      "wallet": "0x53d2d1ce2b9f3e1a8a7f0042f9b3e1a8a7f0043a",
+      "bank": "State Bank of India",
+      "upiId": "varsh@trippay",
+      "upiPin": "654321",
+      "balance": 25000,
+      "reputation": 82
+    },
+    "sneha@gmail.com": {
+      "name": "Sneha Reddy",
+      "password": "password",
+      "wallet": "0x8a7f004271C4B449A62c125638541e2a9b3f3e1a",
+      "bank": "ICICI Bank",
+      "upiId": "sneha@trippay",
+      "upiPin": "111111",
+      "balance": 40000,
+      "reputation": 90
+    },
+    "vikram@gmail.com": {
+      "name": "Vikram Malhotra",
+      "password": "password",
+      "wallet": "0x932fa31df9b3e1a8a7f0042f9b3e1a8a7f0043c",
+      "bank": "Axis Bank",
+      "upiId": "vikram@trippay",
+      "upiPin": "222222",
+      "balance": 15000,
+      "reputation": 88
+    },
+    "preeti@gmail.com": {
+      "name": "Preeti Sen",
+      "password": "password",
+      "wallet": "0x3A9b3f3e1a8a7f0042f9b3e1a8a7f00430x71C4",
+      "bank": "HDFC Bank",
+      "upiId": "preeti@trippay",
+      "upiPin": "333333",
+      "balance": 50000,
+      "reputation": 91
+    }
+  },
+  "trips": {},
+  "invitations": {}
+}

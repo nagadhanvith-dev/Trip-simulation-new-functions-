@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TripPay Chain — Collaborative Vault & Payments</title>
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Leaflet.js Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="style.css?v=6">
+</head>
+<body>
+
+    <!-- SCREEN 1: 3D FLOATING LANDING PAGE -->
+    <div id="screen-landing" class="screen active">
+        <header class="landing-header">
+            <div class="logo">
+                <i data-lucide="shield-alert" class="logo-shield glow-purple"></i>
+                <i data-lucide="wallet" class="logo-wallet"></i>
+                <h1>TripPay<span>Chain</span></h1>
+            </div>
+            <button class="btn btn-primary btn-go-auth">Launch Web3 Console</button>
+        </header>
+
+        <main class="landing-hero">
+            <!-- 3D Particle system overlay -->
+            <canvas id="landing-particles"></canvas>
+            
+            <div class="hero-content">
+                <span class="hero-tag">Decentralized Group Vaults</span>
+                <h2 class="hero-headline">Decentralized Trip Vaults Governed by <span>Group Trust</span></h2>
+                <p class="hero-subtext">Lock deposits, propose expenses, and execute payments only when the group reaches consensus. Fully backed by cryptographic proof and UPI transactions.</p>
+                <div class="hero-ctas">
+                    <button class="btn btn-purple btn-large btn-go-auth">
+                        Get Started <i data-lucide="arrow-right"></i>
+                    </button>
+                    <a href="#features-anchor" class="btn btn-primary btn-large">Explore Features</a>
+                </div>
+            </div>
+
+            <!-- Floating 3D Graphic Area -->
+            <div class="hero-3d-visual" id="hero-3d-container">
+                <div class="floating-wrapper">
+                    <!-- Glass Vault Card -->
+                    <div class="floating-card glass-vault-card">
+                        <div class="card-glow-purple"></div>
+                        <i data-lucide="lock-keyhole" class="icon-vault-3d"></i>
+                        <h3>Goa Trip Vault</h3>
+                        <p class="amount">₹25,000</p>
+                        <span class="status">Locked & Secured</span>
+                    </div>
+                    <!-- Small Orbiting Card 1 -->
+                    <div class="floating-card orb-card orb-1">
+                        <i data-lucide="hotel" class="text-blue"></i>
+                        <div>
+                            <h4>Hotel Propose</h4>
+                            <p>₹12,000</p>
+                        </div>
+                    </div>
+                    <!-- Small Orbiting Card 2 -->
+                    <div class="floating-card orb-card orb-2">
+                        <i data-lucide="check-circle-2" class="text-green"></i>
+                        <div>
+                            <h4>Voted: 4/5 Approved</h4>
+                            <p>Consensus Met</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <div id="features-anchor" class="landing-features">
+            <div class="feature-card">
+                <i data-lucide="shield-check"></i>
+                <h3>Shared Vaults</h3>
+                <p>Nobody owns the pool. The trip smart contract governs and releases funds only upon group approval.</p>
+            </div>
+            <div class="feature-card">
+                <i data-lucide="vote"></i>
+                <h3>Consensus Voting</h3>
+                <p>Configure custom rules (70% or 100%). Expenses execute and withdraw only when threshold is hit.</p>
+            </div>
+            <div class="feature-card">
+                <i data-lucide="file-text"></i>
+                <h3>Cryptographic Ledger</h3>
+                <p>Every transaction, vote, and deposit generates an immutable hash block linked directly to the genesis seed.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 2: AUTHENTICATION (LOGIN & SIGN UP) -->
+    <div id="screen-auth" class="screen">
+        <div class="auth-container">
+            <div class="auth-visual-side">
+                <div class="visual-glow"></div>
+                <div class="logo">
+                    <i data-lucide="shield-alert" class="logo-shield"></i>
+                    <i data-lucide="wallet" class="logo-wallet"></i>
+                    <h2>TripPay<span>Chain</span></h2>
+                </div>
+                <p class="visual-desc">Secure group financial governance. Sign up to join custom trips, verify invitation hash keys, and links your UPI bank accounts.</p>
+            </div>
+
+            <!-- Login / Signup Panels -->
+            <div class="auth-form-side">
+                <!-- Signup Form -->
+                <div id="signup-panel" class="auth-panel active">
+                    <h3>Create Your Profile</h3>
+                    <p class="auth-panel-sub">Register details to get your Web3 wallet & link bank details.</p>
+                    
+                    <form id="signup-form">
+                        <div class="form-group">
+                            <label for="reg-name">Full Name</label>
+                            <input type="text" id="reg-name" placeholder="e.g. Dhanvith" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-email">Gmail Address</label>
+                            <input type="email" id="reg-email" placeholder="e.g. dhanvith@gmail.com" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group half-width">
+                                <label for="reg-password">Password</label>
+                                <input type="password" id="reg-password" placeholder="••••••••" required>
+                            </div>
+                            <div class="form-group half-width">
+                                <label for="reg-bank">Linked Bank</label>
+                                <select id="reg-bank">
+                                    <option value="HDFC Bank">🏛️ HDFC Bank</option>
+                                    <option value="State Bank of India">🏛️ State Bank of India</option>
+                                    <option value="ICICI Bank">🏛️ ICICI Bank</option>
+                                    <option value="Axis Bank">🏛️ Axis Bank</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group half-width">
+                                <label for="reg-pin">UPI PIN (4-6 Digits)</label>
+                                <input type="password" id="reg-pin" placeholder="e.g. 123456" pattern="[0-9]{4,6}" required>
+                            </div>
+                            <div class="form-group half-width">
+                                <label for="reg-wallet">Wallet Address (Optional)</label>
+                                <input type="text" id="reg-wallet" placeholder="0x... (Auto-generated if empty)">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-purple w-full mt-4">Create Account</button>
+                    </form>
+
+                    <div class="auth-divider"><span>OR</span></div>
+                    <button class="btn btn-primary w-full btn-google-sso"><i data-lucide="chrome"></i> Continue with Google</button>
+                    <p class="auth-toggle-link mt-6">Already have an account? <span id="btn-toggle-to-login">Log In</span></p>
+                </div>
+
+                <!-- Login Form -->
+                <div id="login-panel" class="auth-panel">
+                    <h3>Welcome Back</h3>
+                    <p class="auth-panel-sub">Log in with your Gmail credentials.</p>
+                    
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label for="login-email">Gmail Address</label>
+                            <input type="email" id="login-email" placeholder="e.g. dhanvith@gmail.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">Password</label>
+                            <input type="password" id="login-password" placeholder="••••••••" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-purple w-full mt-4">Log In</button>
+                    </form>
+
+                    <div class="auth-divider"><span>OR</span></div>
+                    <button class="btn btn-primary w-full btn-google-sso"><i data-lucide="chrome"></i> Continue with Google</button>
+                    <p class="auth-toggle-link mt-6">Need an account? <span id="btn-toggle-to-signup">Sign Up</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- MOCK GOOGLE SSO POPUP OVERLAY -->
+        <div id="google-sso-popup" class="modal-overlay">
+            <div class="google-popup-card">
+                <div class="google-hdr">
+                    <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" alt="Google" width="75">
+                    <h4>Sign in with Google</h4>
+                    <p>to continue to TripPay Chain</p>
+                </div>
+                <div class="google-accounts-list" id="google-acc-list">
+                    <!-- Dynamic Google accounts list -->
+                </div>
+                <button class="btn btn-primary w-full mt-4 btn-close-google">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 3: TRIP MANAGER (LIST & CREATE) -->
+    <div id="screen-trip-manager" class="screen">
+        <header class="dashboard-header flex justify-between align-center">
+            <div class="logo">
+                <i data-lucide="shield-alert" class="logo-shield"></i>
+                <i data-lucide="wallet" class="logo-wallet"></i>
+                <h2>TripPay<span>Chain</span></h2>
+            </div>
+            <!-- Profile Info in Header -->
+            <div class="header-profile-menu">
+                <div class="profile-avatar" id="header-avatar-initial">R</div>
+                <div class="profile-details">
+                    <h4 id="header-profile-name">Dhanvith</h4>
+                    <span id="header-profile-wallet">0x71C4...0042</span>
+                </div>
+                <button class="btn btn-primary btn-logout" title="Log Out"><i data-lucide="log-out"></i></button>
+            </div>
+        </header>
+
+        <main class="trip-manager-layout">
+            <div class="manager-welcome-hero">
+                <h2>Welcome to Your Web3 Trip Dashboard, <span id="welcome-user-name">Rahul</span></h2>
+                <p>Manage your group vaults, check pending invitations, and verify secure smart contract settlements.</p>
+            </div>
+
+            <div class="manager-grid">
+                <!-- Left: List of Trips -->
+                <div class="manager-col-trips">
+                    <div class="section-card">
+                        <div class="section-card-header">
+                            <h3><i data-lucide="calendar"></i> Your Trips</h3>
+                        </div>
+                        <div class="section-card-body">
+                            <div class="trips-list" id="active-trips-list">
+                                <!-- Dynamic user trips go here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Create / Join Forms -->
+                <div class="manager-col-actions">
+                    <!-- Join Trip via Invite Key Card -->
+                    <div class="section-card highlight-card">
+                        <div class="section-card-header">
+                            <h3><i data-lucide="key-round"></i> Enter Private Join Key</h3>
+                        </div>
+                        <div class="section-card-body">
+                            <p class="text-sm mb-4">Have an invitation code? Paste it below to unlock the vault details and link your deposit.</p>
+                            <form id="join-trip-form">
+                                <div class="form-group">
+                                    <label for="join-key-input">Private Cryptographic Join Key</label>
+                                    <input type="text" id="join-key-input" placeholder="e.g. TP-JOIN-HASH-3e7ad..." required>
+                                </div>
+                                <button type="submit" class="btn btn-purple w-full"><i data-lucide="check-circle-2"></i> Verify Invite & Join</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Create Trip Card -->
+                    <div class="section-card mt-6">
+                        <div class="section-card-header">
+                            <h3><i data-lucide="plus-circle"></i> Create New Trip Vault</h3>
+                        </div>
+                        <div class="section-card-body">
+                            <form id="create-trip-form">
+                                <div class="form-group">
+                                    <label for="new-trip-name">Trip Name</label>
+                                    <input type="text" id="new-trip-name" placeholder="e.g. Himalaya Trek 2026" required>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group half-width">
+                                        <label for="new-trip-deposit">Member Deposit (₹)</label>
+                                        <input type="number" id="new-trip-deposit" min="500" placeholder="e.g. 5000" required>
+                                    </div>
+                                    <div class="form-group half-width">
+                                        <label for="new-trip-threshold">Consensus Threshold</label>
+                                        <select id="new-trip-threshold">
+                                            <option value="0.7">70% Consensus (Standard)</option>
+                                            <option value="1.0">100% Unanimous Approval</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group half-width">
+                                        <label for="new-trip-start">Start Date</label>
+                                        <input type="date" id="new-trip-start" required>
+                                    </div>
+                                    <div class="form-group half-width">
+                                        <label for="new-trip-end">End Date</label>
+                                        <input type="date" id="new-trip-end" required>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-purple w-full"><i data-lucide="shield-plus"></i> Initialize Trip Vault</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- SCREEN 4: ACTIVE TRIP DASHBOARD -->
+    <div id="screen-trip-dashboard" class="screen">
+        <!-- TOP NAVIGATION BAR -->
+        <header class="app-header">
+            <div class="header-logo">
+                <button class="btn-exit-trip" id="btn-back-to-manager" title="Exit Trip Console">
+                    <i data-lucide="chevron-left"></i>
+                </button>
+                <div class="logo-text">
+                    <h1 id="active-vault-title">TripPay<span>Chain</span></h1>
+                    <span class="tagline" id="active-vault-id-label">Vault ID: TP-0042</span>
+                </div>
+            </div>
+
+            <!-- Global Trip Status -->
+            <div class="trip-meta-status">
+                <div class="meta-item">
+                    <span class="meta-label">Active Trip</span>
+                    <span class="meta-value" id="header-trip-name-active">Goa Trip 2026</span>
+                </div>
+                <div class="meta-divider"></div>
+                <div class="meta-item">
+                    <span class="meta-label">Status</span>
+                    <span class="status-badge badge-pending" id="header-trip-status-active">Pending Deposits</span>
+                </div>
+            </div>
+
+            <!-- Profile Info in Header -->
+            <div class="header-profile-menu">
+                <div class="profile-avatar" id="header-avatar-initial-active">R</div>
+                <div class="profile-details">
+                    <h4 id="header-profile-name-active">Dhanvith</h4>
+                    <span class="text-xs text-purple">Reputation: <span id="header-profile-rep-active">95</span></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN LAYOUT -->
+        <div class="main-layout">
+            <!-- SIDEBAR -->
+            <aside class="sidebar">
+                <!-- Vault Card -->
+                <div class="vault-card">
+                    <div class="vault-bg-glow"></div>
+                    <div class="vault-header">
+                        <span class="vault-title">Trip Vault Balance</span>
+                        <span class="vault-network"><span class="dot-active"></span>LocalChain</span>
+                    </div>
+                    <div class="vault-amount" id="sidebar-vault-balance">₹0</div>
+                    <div class="vault-details">
+                        <span id="sidebar-vault-pool-text">Pool Size: ₹0 / ₹25,000</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" id="sidebar-vault-progress" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <!-- Navigation Tabs -->
+                <nav class="sidebar-nav">
+                    <button class="nav-item active" data-tab="dashboard">
+                        <i data-lucide="layout-dashboard"></i>
+                        <span>Dashboard</span>
+                    </button>
+                    <button class="nav-item" data-tab="members">
+                        <i data-lucide="users"></i>
+                        <span>Members & Deposit</span>
+                        <span class="nav-badge" id="nav-pending-deposits-count">5</span>
+                    </button>
+                    <button class="nav-item" data-tab="proposals">
+                        <i data-lucide="git-pull-request"></i>
+                        <span>Expense Proposals</span>
+                        <span class="nav-badge alert" id="nav-pending-proposals-count" style="display:none;">0</span>
+                    </button>
+                    <button class="nav-item" data-tab="blockchain">
+                        <i data-lucide="blocks"></i>
+                        <span>Blockchain Ledger</span>
+                        <span class="network-badge" id="chain-integrity-dot"></span>
+                    </button>
+                    <button class="nav-item" data-tab="scanner">
+                        <i data-lucide="qr-code"></i>
+                        <span>Bill OCR Scanner</span>
+                    </button>
+                    <button class="nav-item" data-tab="map">
+                        <i data-lucide="map"></i>
+                        <span>Trip Map</span>
+                    </button>
+                    <button class="nav-item" data-tab="gallery">
+                        <i data-lucide="image"></i>
+                        <span>Trip Gallery</span>
+                    </button>
+                    <button class="nav-item" data-tab="summary" id="nav-summary-tab" style="opacity: 0.5; cursor: not-allowed;" disabled>
+                        <i data-lucide="file-pie-chart"></i>
+                        <span>Settle Summary</span>
+                    </button>
+                    <button class="nav-item" data-tab="nft" id="nav-nft-tab" style="opacity: 0.5; cursor: not-allowed;" disabled>
+                        <i data-lucide="palette"></i>
+                        <span>Trip NFT Ticket</span>
+                    </button>
+                </nav>
+
+                <!-- Simulator Control Panel -->
+                <div class="sim-control-panel">
+                    <h3 class="sim-panel-title"><i data-lucide="cpu"></i> Simulator Controls</h3>
+                    <div class="sim-buttons">
+                        <button id="sim-btn-tamper" class="btn-sim btn-danger">
+                            <i data-lucide="shield-alert"></i> Tamper Block #2
+                        </button>
+                        <button id="sim-btn-restore" class="btn-sim btn-success" disabled>
+                            <i data-lucide="check-circle-2"></i> Restore Ledger
+                        </button>
+                        <button id="sim-btn-pass-time" class="btn-sim btn-secondary">
+                            <i data-lucide="clock"></i> Pass 24 Hours
+                        </button>
+                        <button id="sim-btn-reset" class="btn-sim btn-warning">
+                            <i data-lucide="rotate-ccw"></i> Reset Server DB
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- MAIN CONTENT AREA -->
+            <main class="content-panel">
+                <!-- BUDGET WARNING BANNER -->
+                <div class="alert-banner warning-banner" id="budget-warning-banner" style="display: none;">
+                    <div class="alert-content">
+                        <i data-lucide="alert-triangle"></i>
+                        <div>
+                            <h4>Budget Warning!</h4>
+                            <p>Over 80% of the trip vault budget has been consumed or committed.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAMPER ALERT BANNER -->
+                <div class="alert-banner danger-banner" id="tamper-alert-banner" style="display: none; padding: 15px 20px;">
+                    <div class="alert-content" style="display: flex; justify-content: space-between; align-items: center; width: 100%; gap: 15px; flex-wrap: wrap;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <i data-lucide="skull" style="flex-shrink: 0;"></i>
+                            <div>
+                                <h4>FRAUD ALERT: Ledger Mismatch Detected!</h4>
+                                <p>Block #2 hashes do not align. Vault withdrawals have been frozen due to smart contract verification failure.</p>
+                            </div>
+                        </div>
+                        <button class="btn btn-purple btn-sm" id="btn-emergency-repay" style="flex-shrink: 0; background: var(--purple-accent) !important; color: white; display: inline-flex; align-items: center; gap: 8px;">
+                            <i data-lucide="rotate-ccw" style="width: 14px; height: 14px;"></i> Reclaim & Repay Deposit
+                        </button>
+                    </div>
+                </div>
+
+                <!-- VIEW 1: DASHBOARD -->
+                <section class="tab-view active" id="view-dashboard">
+                    <div class="dashboard-hero">
+                        <div class="hero-left">
+                            <h2 class="hero-title">Overview: <span id="hero-trip-name">Goa Trip 2026</span></h2>
+                            <p class="hero-desc">Secure group travel vault governed by digital cryptographic signatures and transparent voting rules.</p>
+                            <div class="hero-dates">
+                                <i data-lucide="calendar"></i>
+                                <span id="hero-trip-dates">June 20, 2026 – June 25, 2026</span>
+                            </div>
+                        </div>
+                        <div class="hero-right">
+                            <div class="hero-stat-box">
+                                <span class="stat-lbl">Group Trust Score</span>
+                                <div class="stat-val"><span id="avg-reputation">89</span><span class="stat-unit">/100</span></div>
+                                <span class="stat-sub text-green"><i data-lucide="trending-up"></i> Excellent Rating</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Statistics grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span>Total Pool Locked</span>
+                                <i data-lucide="lock" class="text-purple"></i>
+                            </div>
+                            <div class="stat-main" id="dash-total-pool">₹25,000</div>
+                            <div class="stat-footer" id="dash-pool-sub">₹5,000 / member deposit</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span>Total Spending</span>
+                                <i data-lucide="trending-up" class="text-red"></i>
+                            </div>
+                            <div class="stat-main" id="dash-total-spent">₹0</div>
+                            <div class="stat-footer">Across approved blocks</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span>Active Proposals</span>
+                                <i data-lucide="git-pull-request" class="text-blue"></i>
+                            </div>
+                            <div class="stat-main" id="dash-active-proposals">0</div>
+                            <div class="stat-footer" id="dash-proposals-subtext">No pending reviews</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span>Ledger Blocks</span>
+                                <i data-lucide="box" class="text-green"></i>
+                            </div>
+                            <div class="stat-main" id="dash-block-count">1</div>
+                            <div class="stat-footer" id="dash-ledger-integrity">Integrity Verified</div>
+                        </div>
+                    </div>
+
+                    <!-- Dashboard Columns -->
+                    <div class="dash-columns">
+                        <!-- Column 1: Actionable / Quick View -->
+                        <div class="dash-col main-col">
+                            <div class="section-card">
+                                <div class="section-card-header">
+                                    <h3><i data-lucide="zap"></i> Current Required Actions</h3>
+                                </div>
+                                <div class="section-card-body" id="dashboard-actions-container">
+                                    <!-- Dynamic Action items will appear here -->
+                                </div>
+                            </div>
+
+                            <div class="section-card mt-6">
+                                <div class="section-card-header">
+                                    <h3><i data-lucide="activity"></i> Recent Activity Log</h3>
+                                </div>
+                                <div class="section-card-body">
+                                    <div class="activity-timeline" id="recent-activity-timeline">
+                                        <!-- Dynamic activity logs -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Column 2: Details / Info -->
+                        <div class="dash-col side-col">
+                            <div class="section-card h-full">
+                                <div class="section-card-header">
+                                    <h3><i data-lucide="settings-2"></i> Smart Rules</h3>
+                                </div>
+                                <div class="section-card-body">
+                                    <div class="rule-list">
+                                        <div class="rule-item">
+                                            <div class="rule-icon"><i data-lucide="percentage"></i></div>
+                                            <div class="rule-details">
+                                                <h4>Approval Threshold</h4>
+                                                <p id="rule-threshold-text">70% (4 out of 5 members) required to release funds.</p>
+                                            </div>
+                                        </div>
+                                        <div class="rule-item">
+                                            <div class="rule-icon"><i data-lucide="shield-alert"></i></div>
+                                            <div class="rule-details">
+                                                <h4>Emergency Bypass</h4>
+                                                <p>Instant release. 24h window for post-approval. Failure causes 20pt reputation deduction.</p>
+                                            </div>
+                                        </div>
+                                        <div class="rule-item">
+                                            <div class="rule-icon"><i data-lucide="fingerprint"></i></div>
+                                            <div class="rule-details">
+                                                <h4>Tamper Detection</h4>
+                                                <p>All hashes are verified dynamically. Mismatches lock down vault operations immediately.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End Trip Trigger -->
+                                    <div class="end-trip-block mt-8" id="end-trip-action-card" style="display: none;">
+                                        <h4>Finish Trip & Settle?</h4>
+                                        <p class="text-sm mb-4">Refund the remaining vault balance to all members. Requires Creator signature.</p>
+                                        <button class="btn btn-primary w-full" id="btn-settle-trip">
+                                            <i data-lucide="check-square"></i> Settle & End Trip
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW 2: MEMBERS & DEPOSITS -->
+                <section class="tab-view" id="view-members">
+                    <div class="view-header">
+                        <h2>Group Members & Deposit Pool</h2>
+                        <p>Track invitation status and deposits. Every member must deposit their share to launch the trip and unlock proposals.</p>
+                    </div>
+
+                    <div class="members-layout">
+                        <!-- Left: Members Roster -->
+                        <div class="members-roster-col">
+                            <!-- Add Invites Card (Creator Only) -->
+                            <div class="section-card mb-6" id="creator-invite-card" style="display: none;">
+                                <div class="section-card-header">
+                                    <h3><i data-lucide="user-plus"></i> Invite Friends (Generate Join Key)</h3>
+                                </div>
+                                <div class="section-card-body">
+                                    <form id="invite-friend-form">
+                                        <div class="form-group">
+                                            <label for="invite-email">Friend's Gmail Address</label>
+                                            <input type="email" id="invite-email" placeholder="e.g. varsh@gmail.com" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="invite-wallet">Friend's Expected Wallet Address</label>
+                                            <input type="text" id="invite-wallet" placeholder="0x..." required>
+                                        </div>
+                                        <button type="submit" class="btn btn-purple w-full">Generate Invite Key</button>
+                                    </form>
+
+                                    <!-- Generated Key Info -->
+                                    <div id="generated-invite-key-box" class="invite-info-box mt-4" style="display: none;">
+                                        <span class="lbl">Share Key / Link:</span>
+                                        <div class="invite-key-row font-mono mt-2">
+                                            <span id="txt-generated-key">TP-JOIN-HASH-...</span>
+                                            <button class="btn-copy" id="btn-copy-invite-key" title="Copy Key"><i data-lucide="copy"></i></button>
+                                        </div>
+                                        <div class="invite-link-row font-mono mt-2">
+                                            <span id="txt-generated-link">http://localhost:3000/?invite=...</span>
+                                            <button class="btn-copy" id="btn-copy-invite-link" title="Copy Link"><i data-lucide="link"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="section-card">
+                                <div class="section-card-header">
+                                    <h3>Trip Members</h3>
+                                </div>
+                                <div class="member-list" id="member-roster-list">
+                                    <!-- Dynamic member items -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right: Action Panel -->
+                        <div class="members-actions-col">
+                            <div class="section-card highlight-card">
+                                <div class="section-card-header">
+                                    <h3 id="member-action-title">Deposit Dashboard</h3>
+                                </div>
+                                <div class="section-card-body" id="member-deposit-action-panel">
+                                    <!-- Contextual Deposit Action -->
+                                    <div class="deposit-prompt" id="deposit-action-prompt">
+                                        <div class="prompt-icon-wrapper">
+                                            <i data-lucide="arrow-up-right"></i>
+                                        </div>
+                                        <h4>Lock Deposit</h4>
+                                        <p>You need to lock your initial deposit amount into the shared smart contract vault. These funds are held securely until trip settlement.</p>
+                                        
+                                        <div class="terms-acceptance-box">
+                                            <label class="custom-checkbox">
+                                                <input type="checkbox" id="chk-accept-terms">
+                                                <span class="checkmark"></span>
+                                                <span class="checkbox-label">I accept the Smart Contract terms and deposit conditions.</span>
+                                            </label>
+                                        </div>
+
+                                        <div class="wallet-status-preview mt-4">
+                                            <div class="preview-item">
+                                                <span class="lbl">Wallet Provider</span>
+                                                <span class="val">MetaMask (Simulated)</span>
+                                            </div>
+                                            <div class="preview-item">
+                                                <span class="lbl">Account Address</span>
+                                                <span class="val font-mono" id="simulated-wallet-address">0x71C...3A9b</span>
+                                            </div>
+                                        </div>
+
+                                        <button class="btn btn-purple btn-large w-full mt-6" id="btn-make-deposit" disabled>
+                                            <i data-lucide="wallet"></i> Sign & Deposit <span id="lbl-deposit-amt">₹5,000</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="deposit-success" id="deposit-success-panel" style="display: none;">
+                                        <div class="success-icon-wrapper">
+                                            <i data-lucide="check-circle-2"></i>
+                                        </div>
+                                        <h4>Deposit Locked</h4>
+                                        <p class="text-green">Deposit paid successfully.</p>
+                                        <div class="tx-hash-badge mt-4">
+                                            <span class="lbl">Tx Hash:</span>
+                                            <span class="val font-mono" id="deposit-tx-hash">0x932f...a31d</span>
+                                        </div>
+                                        <p class="mt-4 text-sm text-gray">Waiting for remaining members to lock their deposits before the trip starts.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW 3: EXPENSE PROPOSALS -->
+                <section class="tab-view" id="view-proposals">
+                    <div class="view-header">
+                        <h2>Decentralized Expense Voting</h2>
+                        <p>No funds can leave the vault unless approved by the consensus threshold. Emergency items bypass voting but carry heavy reputation risk.</p>
+                    </div>
+
+                    <div class="proposals-layout">
+                        <!-- Left: Form to create a Proposal -->
+                        <div class="proposal-form-col">
+                            <div class="section-card">
+                                <div class="section-card-header">
+                                    <h3>Create Expense Proposal</h3>
+                                </div>
+                                <div class="section-card-body">
+                                    <form id="expense-proposal-form">
+                                        <div class="form-group">
+                                            <label for="proposal-title">Expense Description</label>
+                                            <input type="text" id="proposal-title" placeholder="e.g. Hotel Booking - Candolim Resort" required>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group half-width">
+                                                <label for="proposal-amount">Amount (₹)</label>
+                                                <input type="number" id="proposal-amount" min="1" placeholder="e.g. 12000" required>
+                                            </div>
+                                            <div class="form-group half-width">
+                                                <label for="proposal-category">Category</label>
+                                                <select id="proposal-category">
+                                                    <option value="Hotel">🏨 Hotel</option>
+                                                    <option value="Food">🍔 Food</option>
+                                                    <option value="Fuel">⛽ Fuel</option>
+                                                    <option value="Entertainment">🎪 Entertainment</option>
+                                                    <option value="Miscellaneous">📦 Miscellaneous</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Contract Execution Rule</label>
+                                            <div class="proposal-type-options">
+                                                <label class="type-option-card active">
+                                                    <input type="radio" name="proposal-type" value="standard" checked>
+                                                    <div class="type-option-content">
+                                                        <span class="type-title"><i data-lucide="vote"></i> Standard Vote</span>
+                                                        <span class="type-desc">Requires consensus threshold approval to withdraw from vault.</span>
+                                                    </div>
+                                                </label>
+                                                <label class="type-option-card">
+                                                    <input type="radio" name="proposal-type" value="emergency">
+                                                    <div class="type-option-content">
+                                                        <span class="type-title text-red"><i data-lucide="shield-alert"></i> Emergency Mode</span>
+                                                        <span class="type-desc text-red">Withdraw instantly. Post-approval within 24h.</span>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-purple w-full mt-4" id="btn-submit-proposal">
+                                            <i data-lucide="send"></i> Submit & Sign Proposal
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right: Roster of active proposals -->
+                        <div class="proposals-list-col">
+                            <div class="section-card">
+                                <div class="section-card-header flex justify-between align-center">
+                                    <h3>Active Proposals</h3>
+                                    <span class="proposals-count-badge" id="proposals-count-badge">0</span>
+                                </div>
+                                <div class="proposal-feed" id="proposal-feed-list">
+                                    <!-- Dynamic list of proposals -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW 4: BLOCKCHAIN EXPLORER -->
+                <section class="tab-view" id="view-blockchain">
+                    <div class="view-header flex justify-between align-center">
+                        <div>
+                            <h2>Cryptographic Ledger Explorer</h2>
+                            <p>Every vault event is compiled into a block, signed, timestamped, hashed, and linked to the previous block.</p>
+                        </div>
+                        <div class="integrity-status-panel">
+                            <span class="integrity-badge badge-healthy" id="ledger-status-badge">
+                                <i data-lucide="check-circle-2"></i> Ledger Valid
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="blockchain-visual-container">
+                        <!-- Horizontal linked blockchain visualization -->
+                        <div class="blockchain-scroller">
+                            <div class="blockchain-track" id="blockchain-track">
+                                <!-- Dynamic blocks and linking connectors -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Selected Block Detailed View -->
+                    <div class="section-card mt-6">
+                        <div class="section-card-header">
+                            <h3>Block Inspector</h3>
+                        </div>
+                        <div class="section-card-body" id="block-inspector-body">
+                            <div class="no-selection-prompt">
+                                <i data-lucide="fingerprint"></i>
+                                <p>Select any block in the timeline above to cryptographically inspect its details, hashes, and signatures.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW 5: BILL OCR & QR SCANNER -->
+                <section class="tab-view" id="view-scanner">
+                    <div class="view-header">
+                        <h2>AI Bill Scanner & UPI QR Code Scanner</h2>
+                        <p>Upload a bill or scan a UPI QR code to automatically parse the amount, merchant, and category details.</p>
+                    </div>
+
+                    <div class="scanner-layout">
+                        <!-- Left: Scan panel -->
+                        <div class="scanner-action-col">
+                            <!-- Sample Bills -->
+                            <div class="section-card">
+                                <div class="section-card-header">
+                                    <h3>1. Choose Sample Receipt</h3>
+                                </div>
+                                <div class="sample-bills-grid">
+                                    <button class="btn-sample-bill" data-bill="hotel">
+                                        <span class="emoji">🏨</span>
+                                        <div class="btn-bill-text">
+                                            <strong>Candolim Beach Resort</strong>
+                                            <span>₹12,000 • Hotel</span>
+                                        </div>
+                                    </button>
+                                    <button class="btn-sample-bill" data-bill="food">
+                                        <span class="emoji">🍔</span>
+                                        <div class="btn-bill-text">
+                                            <strong>Britto's Beach Shack</strong>
+                                            <span>₹3,000 • Food</span>
+                                        </div>
+                                    </button>
+                                    <button class="btn-sample-bill" data-bill="fuel">
+                                        <span class="emoji">⛽</span>
+                                        <div class="btn-bill-text">
+                                            <strong>HP Fuel Station</strong>
+                                            <span>₹1,500 • Fuel</span>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Interactive Dropzone -->
+                            <div class="section-card mt-6">
+                                <div class="section-card-header">
+                                    <h3>2. Interactive Scanner / Dropzone</h3>
+                                </div>
+                                <div class="upload-dropzone" id="scanner-dropzone">
+                                    <div class="dropzone-glow"></div>
+                                    <div class="dropzone-content">
+                                        <i data-lucide="cloud-lightning" class="dropzone-icon"></i>
+                                        <p class="drop-text-primary">Drag & drop receipt image or UPI QR Code here</p>
+                                        <p class="drop-text-secondary">Or click to select a file</p>
+                                        <input type="file" id="scanner-file-input" style="display: none;" accept="image/*">
+                                    </div>
+                                    <!-- Visual scanning overlay -->
+                                    <div class="scanner-line-animation" style="display: none;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right: OCR Scan status and Form Fill -->
+                        <div class="scanner-results-col">
+                            <div class="section-card h-full">
+                                <div class="section-card-header">
+                                    <h3>AI OCR Extraction Results</h3>
+                                </div>
+                                <div class="section-card-body flex-col justify-between h-grow">
+                                    <div id="ocr-empty-state" class="ocr-placeholder-state">
+                                        <i data-lucide="scan-line"></i>
+                                        <p>Select a sample bill or drag a file to run the simulated AI OCR and QR parser.</p>
+                                    </div>
+
+                                    <!-- OCR Result details -->
+                                    <div id="ocr-result-details" style="display: none;">
+                                        <div class="ocr-status-badge">
+                                            <i data-lucide="sparkles"></i> AI Parse Successful
+                                        </div>
+
+                                        <div class="receipt-bill-card">
+                                            <div class="receipt-header">
+                                                <h4 id="extracted-merchant">Candolim Beach Resort</h4>
+                                                <span id="extracted-date" class="receipt-date">15-Jun-2026</span>
+                                            </div>
+                                            <hr class="receipt-divider">
+                                            <div class="receipt-row">
+                                                <span>Category</span>
+                                                <strong id="extracted-category">Hotel</strong>
+                                            </div>
+                                            <div class="receipt-row">
+                                                <span>Confidence Score</span>
+                                                <strong class="text-green">98.4%</strong>
+                                            </div>
+                                            <hr class="receipt-divider">
+                                            <div class="receipt-row total">
+                                                <span>Total Amount</span>
+                                                <strong id="extracted-amount">₹12,000</strong>
+                                            </div>
+                                        </div>
+
+                                        <!-- Receipt Details Box -->
+                                        <div class="alert-banner info-banner mt-4">
+                                            <div class="alert-content">
+                                                <i data-lucide="info"></i>
+                                                <p>AI verified the QR signature. Click below to load this as an expense proposal.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button class="btn btn-purple btn-large w-full mt-6" id="btn-scanner-import" disabled>
+                                        <i data-lucide="file-input"></i> Populate Proposal Form
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW: COLLABORATIVE MAP & ITINERARY -->
+                <section class="tab-view" id="view-map">
+                    <div class="view-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                        <div>
+                            <h2>Collaborative Trip Map & Itinerary</h2>
+                            <p>Mark places, suggest new destinations, and track the active group journey. Click on the map to auto-fill coordinates!</p>
+                        </div>
+                        <div class="current-dest-indicator" style="background: rgba(139, 92, 246, 0.1); border: 1px solid var(--purple-accent); padding: 10px 18px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
+                            <i data-lucide="map-pin" class="text-purple" style="animation: pulse 2s infinite;"></i>
+                            <div>
+                                <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; display: block;">Next Destination</span>
+                                <strong id="header-next-destination" style="font-size: 14px; color: white;">None Selected</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1.6fr 1fr; gap: 20px; align-items: start; margin-top: 20px;" class="map-grid-responsive">
+                        <!-- Left: Leaflet Map Card -->
+                        <div class="section-card" style="padding: 0; overflow: hidden; height: 550px; position: relative;">
+                            <div id="trip-map-container" style="width: 100%; height: 100%; min-height: 500px; background: #0c0f19;"></div>
+                        </div>
+
+                        <!-- Right: Destinations List & Add Form -->
+                        <div style="display: flex; flex-direction: column; gap: 20px;">
+                            <!-- Form to Add Place -->
+                            <div class="section-card">
+                                <div class="section-card-header">
+                                    <h3>Suggest Place to Visit</h3>
+                                </div>
+                                <div class="section-card-body" style="padding-top: 0;">
+                                    <form id="add-destination-form">
+                                        <div class="form-group">
+                                            <label for="map-search-input">Search Map Location</label>
+                                            <div style="display: flex; gap: 8px;">
+                                                <input type="text" id="map-search-input" placeholder="Search e.g. Baga Beach, Goa..." style="flex-grow: 1;">
+                                                <button type="button" class="btn btn-purple" id="btn-search-location" style="padding: 0 12px; flex-shrink: 0;"><i data-lucide="search"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="map-place-name">Place Name</label>
+                                            <input type="text" id="map-place-name" placeholder="e.g. Britto's Beach Shack" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="map-place-notes">Notes / Activities</label>
+                                            <input type="text" id="map-place-notes" placeholder="e.g. Dinner, drinks and karaoke" required>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group half-width">
+                                                <label for="map-place-lat">Latitude</label>
+                                                <input type="number" id="map-place-lat" step="any" placeholder="e.g. 15.5494" required>
+                                            </div>
+                                            <div class="form-group half-width">
+                                                <label for="map-place-lng">Longitude</label>
+                                                <input type="number" id="map-place-lng" step="any" placeholder="e.g. 73.7535" required>
+                                            </div>
+                                        </div>
+                                        <p class="text-xs text-muted" style="margin-top:-8px; margin-bottom: 12px;"><i data-lucide="info" style="width:12px; height:12px; display:inline-block; vertical-align:middle; margin-right:4px;"></i> Tip: Click anywhere on the map to automatically grab coordinates!</p>
+                                        <button type="submit" class="btn btn-purple w-full"><i data-lucide="plus-circle"></i> Add to Itinerary</button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Itinerary List Card -->
+                            <div class="section-card" style="max-height: 290px; display: flex; flex-direction: column;">
+                                <div class="section-card-header" style="flex-shrink: 0; padding-bottom: 10px;">
+                                    <h3>Group Itinerary List</h3>
+                                </div>
+                                <div class="section-card-body" id="map-itinerary-list" style="overflow-y: auto; flex-grow: 1; padding-top: 0; display: flex; flex-direction: column; gap: 10px;">
+                                    <!-- Dynamic itinerary items -->
+                                    <div class="no-selection-prompt" style="padding: 20px 0;">
+                                        <i data-lucide="navigation"></i>
+                                        <p>No destinations suggested yet. Mark your places to start the route!</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW: COLLABORATIVE MEDIA GALLERY -->
+                <section class="tab-view" id="view-gallery">
+                    <div class="view-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                        <div>
+                            <h2>Shared Trip Gallery</h2>
+                            <p>Post and download shared pictures or videos clicked during the trip. Keep memories synced in full-resolution!</p>
+                        </div>
+                        <div>
+                            <button class="btn btn-purple" id="btn-trigger-upload-media">
+                                <i data-lucide="upload-cloud"></i> Post Photo / Video
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Hidden Input Form for Uploading -->
+                    <div id="media-upload-card" class="section-card mt-6" style="display: none; border-color: var(--purple-accent);">
+                        <div class="section-card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                            <h3>Upload Trip Media</h3>
+                            <button class="btn-close-upi" id="btn-close-media-upload"><i data-lucide="x"></i></button>
+                        </div>
+                        <div class="section-card-body" style="padding-top:0;">
+                            <form id="upload-media-form" style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; align-items: center;" class="media-upload-responsive">
+                                <!-- Drag & Drop area -->
+                                <div style="border: 2px dashed rgba(255,255,255,0.1); border-radius: 12px; height: 180px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); cursor: pointer; text-align: center; padding: 15px; position: relative;" id="media-drop-zone">
+                                    <input type="file" id="media-file-input" accept="image/*,video/*" style="opacity: 0; position: absolute; width: 100%; height: 100%; top: 0; left: 0; cursor: pointer;" required>
+                                    <i data-lucide="image" style="width: 40px; height: 40px; color: var(--purple-light); margin-bottom: 8px;"></i>
+                                    <span style="font-size: 13px; font-weight: 500; display: block; color: white;" id="media-upload-status">Drag files here or click to browse</span>
+                                    <span style="font-size: 10px; color: var(--text-muted); margin-top: 4px;">Supports PNG, JPG, GIF, MP4, WebM</span>
+                                </div>
+                                <!-- Caption and submit -->
+                                <div>
+                                    <div class="form-group">
+                                        <label for="media-caption">Caption / Memory Note</label>
+                                        <input type="text" id="media-caption" placeholder="e.g. Sunset drinks by the pool side!" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-purple btn-large w-full mt-4" id="btn-submit-media">
+                                        <i data-lucide="plus-circle"></i> Upload to Gallery
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Gallery grid -->
+                    <div class="section-card mt-6" style="min-height: 450px;">
+                        <div class="section-card-body" style="padding: 10px 0;">
+                            <div class="media-grid" id="trip-media-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px;">
+                                <!-- Dynamically populated media cards -->
+                                <div class="no-selection-prompt" style="grid-column: 1 / -1; padding: 60px 0;">
+                                    <i data-lucide="camera"></i>
+                                    <p>No photos or videos shared yet. Click "Post Photo / Video" above to upload your first memory!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Lightbox modal for full size viewing -->
+                <div class="upi-sheet-overlay" id="gallery-lightbox-overlay" style="display: none; z-index: 2000; justify-content: center; align-items: center; background: rgba(0,0,0,0.9);">
+                    <div style="position: relative; max-width: 90%; max-height: 90%; display: flex; flex-direction: column; align-items: center;">
+                        <button class="btn-close-upi" id="btn-close-lightbox" style="position: absolute; top: -50px; right: 0; background: rgba(255,255,255,0.1); border-radius: 50%; color: white;"><i data-lucide="x"></i></button>
+                        <div id="lightbox-content" style="border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); background: #000; display: flex; justify-content: center; align-items: center; max-height: 70vh;">
+                            <!-- Dynamically loaded img or video -->
+                        </div>
+                        <div id="lightbox-caption" style="margin-top: 15px; text-align: center; color: white; font-weight: 500; font-size: 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.5);"></div>
+                    </div>
+                </div>
+
+                <!-- VIEW 6: TRIP SETTLEMENT SUMMARY -->
+                <section class="tab-view" id="view-summary">
+                    <div class="view-header">
+                        <h2>Trip Settlement Summary</h2>
+                        <p>Detailed breakdown of funds, approved expenditures, and distributed refunds returned via UPI bank transfers.</p>
+                    </div>
+
+                    <div class="summary-dashboard-layout">
+                        <!-- Top Stats Cards -->
+                        <div class="summary-stats-grid">
+                            <div class="sum-card card-purple">
+                                <span class="lbl">Vault Total Pool</span>
+                                <h3 id="sum-total-pool">₹25,000</h3>
+                                <p>Deposited by 5 members</p>
+                            </div>
+                            <div class="sum-card card-red">
+                                <span class="lbl">Total Approved Spent</span>
+                                <h3 id="sum-total-spent">₹18,000</h3>
+                                <p>Across approved blocks</p>
+                            </div>
+                            <div class="sum-card card-green">
+                                <span class="lbl">Remaining Refund Pool</span>
+                                <h3 id="sum-remaining">₹7,000</h3>
+                                <p>To be split equally</p>
+                            </div>
+                            <div class="sum-card card-blue">
+                                <span class="lbl">Individual Member Refund</span>
+                                <h3 id="sum-refund-share">₹1,400</h3>
+                                <p>Direct bank transfers completed</p>
+                            </div>
+                        </div>
+
+                        <!-- Details Columns -->
+                        <div class="summary-details-grid mt-6">
+                            <!-- Left: List of Expenses -->
+                            <div class="section-card">
+                                <div class="section-card-header">
+                                    <h3>Approved Expenditures List</h3>
+                                </div>
+                                <div class="section-card-body">
+                                    <table class="summary-expenses-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Description</th>
+                                                <th>Category</th>
+                                                <th>Spent By</th>
+                                                <th class="text-right">Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="summary-expenses-tbody">
+                                            <!-- Dynamic rows -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Right: Refund status list -->
+                            <div class="section-card">
+                                <div class="section-card-header">
+                                    <h3>UPI Bank Refund Transactions</h3>
+                                </div>
+                                <div class="section-card-body">
+                                    <div class="refunds-list" id="summary-refunds-list">
+                                        <!-- Dynamic refund lists -->
+                                    </div>
+                                    <div class="summary-nft-cta mt-6">
+                                        <h4>Mementos Unlocked!</h4>
+                                        <p class="text-sm mb-4">A custom souvenir NFT ticket is available to celebrate your trip metrics.</p>
+                                        <button class="btn btn-purple w-full" id="btn-go-claim-nft">
+                                            <i data-lucide="palette"></i> Claim Trip NFT Ticket
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW 7: TRIP NFT COLLECTIBLE -->
+                <section class="tab-view" id="view-nft">
+                    <div class="view-header">
+                        <h2>Trip NFT Collectible Ticket</h2>
+                        <p>Claim your unique cryptographic souvenir ticket containing all statistics and digital hashes from the trip.</p>
+                    </div>
+
+                    <div class="nft-layout">
+                        <!-- Holographic NFT Display -->
+                        <div class="nft-card-container">
+                            <div class="nft-card-wrapper">
+                                <div class="nft-3d-card" id="trip-nft-card">
+                                    <div class="nft-card-sheen"></div>
+                                    
+                                    <!-- NFT Visual Content -->
+                                    <div class="nft-card-inner">
+                                        <div class="nft-card-top">
+                                            <span class="nft-badge" id="nft-badge-title">Goa Trip 2026</span>
+                                            <span class="nft-serial">#0042</span>
+                                        </div>
+
+                                        <div class="nft-graphic-area">
+                                            <!-- SVG Drawing Container -->
+                                            <div id="nft-svg-container" class="nft-svg-holder">
+                                                <!-- Dynamic SVG will be injected here -->
+                                            </div>
+                                        </div>
+
+                                        <div class="nft-card-details">
+                                            <div class="nft-stat-row">
+                                                <div class="nft-stat-col">
+                                                    <span class="lbl">Members</span>
+                                                    <span class="val" id="nft-members-val">5 Friends</span>
+                                                </div>
+                                                <div class="nft-stat-col">
+                                                    <span class="lbl">Total Spent</span>
+                                                    <span class="val" id="nft-spent-val">₹18,000</span>
+                                                </div>
+                                            </div>
+                                            <div class="nft-hash-box">
+                                                <span class="lbl">Root Block Hash</span>
+                                                <span class="val font-mono" id="nft-root-hash">0x8a7f...2d3f</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- NFT Details & Mint Action -->
+                        <div class="nft-details-panel">
+                            <div class="section-card">
+                                <div class="section-card-header">
+                                    <h3>Mint Souvenir NFT</h3>
+                                </div>
+                                <div class="section-card-body">
+                                    <p class="mb-4">This NFT ticket proves participation and budget compliance for the trip. It is minted on-chain and sent to all participant wallets.</p>
+                                    
+                                    <div class="nft-benefits-list mb-6">
+                                        <div class="benefit-item">
+                                            <i data-lucide="award"></i>
+                                            <div>
+                                                <strong>Trust Reputation Proof</strong>
+                                                <p>Increases base reputation by +5 points on completion.</p>
+                                            </div>
+                                        </div>
+                                        <div class="benefit-item">
+                                            <i data-lucide="lock-keyhole"></i>
+                                            <div>
+                                                <strong>Verifiable Credentials</strong>
+                                                <p>Integrity hashes are baked into the NFT metadata.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button class="btn btn-purple btn-large w-full" id="btn-mint-nft">
+                                        <i data-lucide="sparkles"></i> Claim & Mint NFT Ticket
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- FULLSCREEN UPI PAYMENT SHEET OVERLAY -->
+    <div id="upi-payment-overlay" class="modal-overlay">
+        <!-- Slide-Up UPI PIN Panel -->
+        <div class="upi-payment-sheet" id="upi-payment-sheet">
+            <!-- Header -->
+            <div class="upi-sheet-hdr">
+                <div class="upi-hdr-left">
+                    <span class="upi-logo font-bold">UPI</span>
+                    <span class="upi-divider"></span>
+                    <span class="upi-app-name">TripPay Secure Link</span>
+                </div>
+                <button class="btn-close-upi" id="btn-close-upi-sheet"><i data-lucide="x"></i></button>
+            </div>
+
+            <!-- Transfer details -->
+            <div class="upi-payee-card">
+                <div class="payee-avatar" id="upi-payee-initial">V</div>
+                <div class="payee-details">
+                    <span class="lbl">Paying To</span>
+                    <h4 id="upi-payee-name">Trip Vault Account</h4>
+                    <span id="upi-payee-id" class="upi-id font-mono">vault@trippay</span>
+                </div>
+                <div class="pay-amount-badge" id="upi-pay-amount">₹5,000</div>
+            </div>
+
+            <!-- Bank Selection Info -->
+            <div class="upi-bank-selector">
+                <div class="bank-info-left">
+                    <span class="bank-icon">🏛️</span>
+                    <div>
+                        <h4 id="upi-source-bank-name">HDFC Bank</h4>
+                        <span class="acc-suffix">Savings A/C XX8239</span>
+                    </div>
+                </div>
+                <span class="verify-badge"><i data-lucide="shield-check"></i> Linked</span>
+            </div>
+
+            <!-- Verification Progress Loader -->
+            <div class="upi-processing-panel" id="upi-processing-panel" style="display: none;">
+                <div class="upi-spinner"></div>
+                <h4 id="upi-processing-status">Securing connection...</h4>
+                <p class="text-xs text-muted font-mono">Deducting funds securely via bank gateway API</p>
+            </div>
+
+            <!-- PIN KEYPAD SCREEN -->
+            <div class="upi-pin-panel" id="upi-pin-panel">
+                <div class="pin-entry-box">
+                    <label for="upi-pin-display">ENTER UPI PIN</label>
+                    <div class="pin-display-wrapper">
+                        <!-- Six dots/blocks masking the digits -->
+                        <div class="pin-dot" data-index="0"></div>
+                        <div class="pin-dot" data-index="1"></div>
+                        <div class="pin-dot" data-index="2"></div>
+                        <div class="pin-dot" data-index="3"></div>
+                        <div class="pin-dot" data-index="4"></div>
+                        <div class="pin-dot" data-index="5"></div>
+                    </div>
+                    <span class="error-text text-red text-xs mt-2" id="upi-pin-error-msg" style="display: none;">Incorrect UPI PIN. Try again.</span>
+                </div>
+
+                <!-- Digital Numeric Keypad -->
+                <div class="upi-keypad">
+                    <button class="keypad-btn" data-val="1">1</button>
+                    <button class="keypad-btn" data-val="2">2</button>
+                    <button class="keypad-btn" data-val="3">3</button>
+                    <button class="keypad-btn" data-val="4">4</button>
+                    <button class="keypad-btn" data-val="5">5</button>
+                    <button class="keypad-btn" data-val="6">6</button>
+                    <button class="keypad-btn" data-val="7">7</button>
+                    <button class="keypad-btn" data-val="8">8</button>
+                    <button class="keypad-btn" data-val="9">9</button>
+                    <button class="keypad-btn keypad-special btn-del-keypad" data-val="del"><i data-lucide="delete"></i></button>
+                    <button class="keypad-btn" data-val="0">0</button>
+                    <button class="keypad-btn keypad-special btn-ok-keypad" data-val="ok"><i data-lucide="check"></i></button>
+                </div>
+            </div>
+
+            <!-- SUCCESS PANEL overlay inside sheet -->
+            <div class="upi-success-panel" id="upi-success-overlay" style="display: none;">
+                <div class="success-ring">
+                    <i data-lucide="check-circle" class="success-chime-icon"></i>
+                </div>
+                <h3>Payment Successful</h3>
+                <h4 id="upi-success-amount">₹5,000</h4>
+                <div class="upi-ref-badge mt-4 font-mono">
+                    <span>UPI Ref No:</span>
+                    <span id="upi-success-ref-no">618290382903</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="blockchain.js?v=6"></script>
+    <script src="app.js?v=6"></script>
+</body>
+</html>

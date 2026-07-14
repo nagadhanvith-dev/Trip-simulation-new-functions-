@@ -1,0 +1,13 @@
+{
+  "name": "trippay-chain",
+  "version": "1.0.0",
+  "description": "TripPay Chain — Blockchain Shared Vault & Expense Voting Simulator",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
